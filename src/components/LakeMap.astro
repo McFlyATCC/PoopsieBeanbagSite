@@ -1,0 +1,144 @@
+---
+interface LakeView {
+  id: string;
+  name: string;
+  region?: string;
+  blurb: string;
+  x: number; // 0–100
+  y: number; // 0–100
+  yearsLabel: string; // e.g. "2010–2014"
+}
+interface Props {
+  lakes: LakeView[];
+}
+const { lakes } = Astro.props;
+// Stylized Minnesota silhouette (viewBox 100 × 120). Not survey-accurate —
+// a vintage program map. Pins map x → x, y → y×1.2.
+const MN =
+  "M18,12 L19,5 L25,5 L25,11 L68,11 L78,8 L92,22 L74,40 L70,52 L68,64 L66,78 L63,112 L18,112 Z";
+---
+
+<div class="lakemap">
+  <div class="lakemap__map">
+    <svg viewBox="0 0 100 120" role="img" aria-label="Map of Minnesota showing the three host lakes">
+      <path d={MN} class="lakemap__state" />
+      {
+        lakes.map((l) => (
+          <a href={`#lake-${l.id}`} class="lakemap__pin" aria-label={`${l.name} — ${l.yearsLabel}`}>
+            <circle cx={l.x} cy={l.y * 1.2} r="4.5" class="lakemap__pin-ring" />
+            <circle cx={l.x} cy={l.y * 1.2} r="2" class="lakemap__pin-dot" />
+            <text x={l.x} y={l.y * 1.2 - 6.5} class="lakemap__pin-label" text-anchor="middle">
+              {l.name}
+            </text>
+          </a>
+        ))
+      }
+    </svg>
+  </div>
+
+  <ol class="lakemap__list">
+    {
+      lakes.map((l) => (
+        <li id={`lake-${l.id}`} class="lakemap__card card-paper">
+          <p class="lakemap__years stat-face">{l.yearsLabel}</p>
+          <h3 class="lakemap__name">{l.name}</h3>
+          {l.region && <p class="eyebrow lakemap__region">{l.region}</p>}
+          <p class="lakemap__blurb">{l.blurb}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .lakemap {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .lakemap__map svg {
+    width: 100%;
+    max-width: 22rem;
+    margin-inline: auto;
+    display: block;
+    overflow: visible;
+  }
+  .lakemap__state {
+    fill: color-mix(in srgb, var(--color-pine) 78%, var(--color-lake));
+    stroke: var(--color-lake-deep);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+  .lakemap__pin {
+    cursor: pointer;
+  }
+  .lakemap__pin-ring {
+    fill: color-mix(in srgb, var(--color-amber) 55%, transparent);
+    transition: r 0.2s ease;
+  }
+  .lakemap__pin-dot {
+    fill: var(--color-agate);
+    stroke: var(--color-paper);
+    stroke-width: 0.6;
+  }
+  .lakemap__pin-label {
+    font-family: var(--font-accent);
+    font-size: 4.5px;
+    letter-spacing: 0.04em;
+    fill: var(--color-paper);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    paint-order: stroke;
+    stroke: var(--color-lake-deep);
+    stroke-width: 1px;
+  }
+  .lakemap__pin:hover .lakemap__pin-ring,
+  .lakemap__pin:focus-visible .lakemap__pin-ring {
+    r: 6.5;
+  }
+  .lakemap__pin:hover .lakemap__pin-label,
+  .lakemap__pin:focus-visible .lakemap__pin-label {
+    opacity: 1;
+  }
+
+  .lakemap__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .lakemap__card {
+    padding: 1rem 1.25rem;
+    scroll-margin-top: 6rem;
+  }
+  .lakemap__card:target {
+    outline: 2px solid var(--color-amber);
+  }
+  .lakemap__years {
+    color: var(--color-agate);
+    font-size: 0.95rem;
+  }
+  .lakemap__name {
+    margin: 0.1rem 0 0.15rem;
+    font-size: 1.4rem;
+  }
+  .lakemap__region {
+    color: var(--color-ink-faint);
+    font-size: 0.7rem;
+    margin-bottom: 0.4rem;
+  }
+  .lakemap__blurb {
+    margin: 0;
+    color: var(--color-ink-soft);
+  }
+
+  @media (max-width: 720px) {
+    .lakemap {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

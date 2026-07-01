@@ -1,0 +1,94 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Bracket = NonNullable<CollectionEntry<"champions">["data"]["bracket"]>;
+interface Props {
+  bracket: Bracket;
+}
+const { bracket } = Astro.props;
+---
+
+<div class="bracket" role="table" aria-label="Tournament bracket">
+  {
+    bracket.map((round) => (
+      <div class="bracket__round" role="columnheader">
+        <p class="eyebrow bracket__round-name">{round.round}</p>
+        <div class="bracket__matches">
+          {round.matches.map((m) => (
+            <div class="bracket__match">
+              <div class:list={["bracket__team", { "is-winner": m.winner === 1 }]}>
+                <span class="bracket__name">{m.team1}</span>
+                {m.score1 !== undefined && (
+                  <span class="bracket__score stat-face">{m.score1}</span>
+                )}
+              </div>
+              <div class:list={["bracket__team", { "is-winner": m.winner === 2 }]}>
+                <span class="bracket__name">{m.team2}</span>
+                {m.score2 !== undefined && (
+                  <span class="bracket__score stat-face">{m.score2}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .bracket {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .bracket__round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1rem;
+    min-width: 12.5rem;
+  }
+  .bracket__round-name {
+    margin-bottom: 0.25rem;
+  }
+  .bracket__matches {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1rem;
+    height: 100%;
+  }
+  .bracket__match {
+    border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+    background: var(--color-paper);
+  }
+  .bracket__team {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-ink-soft);
+  }
+  .bracket__team + .bracket__team {
+    border-top: 1px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+  }
+  .bracket__team.is-winner {
+    background: color-mix(in srgb, var(--color-amber) 22%, transparent);
+    color: var(--color-lake-deep);
+    font-weight: 600;
+  }
+  .bracket__name {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+  }
+  .bracket__score {
+    font-size: 1rem;
+    color: var(--color-agate);
+  }
+  .bracket__team.is-winner .bracket__score {
+    color: var(--color-lake-deep);
+  }
+</style>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "rush",
+    "name": "Rush Lake",
+    "region": "Otter Tail County, MN",
+    "blurb": "Where it all began. The early Agate Cup years were played on the shore at Rush Lake, boards set up in the grass between the cabin and the water.",
+    "x": 34,
+    "y": 52
+  },
+  {
+    "id": "ottertail",
+    "name": "Otter Tail Lake",
+    "region": "Otter Tail County, MN",
+    "blurb": "The tournament's middle era. Bigger crowds, longer brackets, and more than one final decided as the sun went down over the lake.",
+    "x": 29,
+    "y": 49
+  },
+  {
+    "id": "island",
+    "name": "Island Lake",
+    "region": "Minnesota",
+    "blurb": "The current home of the Poopsie Beanbag Invitational, and where the tradition carries on every July 4th weekend.",
+    "x": 63,
+    "y": 40
+  }
+]

@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+/* ============================================================
+   POOPSIE BEANBAG INVITATIONAL — "The Agate Cup" design system
+   Palette + type are subject-derived: banded agate stones,
+   Minnesota lake dusk, faded flag cotton, northwoods pine.
+   ============================================================ */
+
+@theme {
+  /* --- color: aged canvas & paper --- */
+  --color-canvas: #ece3cc;
+  --color-canvas-deep: #e3d7ba;
+  --color-paper: #f7f1e1;
+
+  /* --- ink --- */
+  --color-ink: #23201a;
+  --color-ink-soft: #4b463c;
+  --color-ink-faint: #6f6857;
+
+  /* --- lake dusk (teal-navy) --- */
+  --color-lake: #1b3a4b;
+  --color-lake-deep: #122a36;
+
+  /* --- oxidized agate red --- */
+  --color-agate: #a63a2e;
+  --color-agate-dark: #7f2b22;
+
+  /* --- agate amber / trophy gold --- */
+  --color-amber: #d9a441;
+  --color-amber-deep: #b9832c;
+
+  /* --- northwoods pine --- */
+  --color-pine: #2e4636;
+
+  /* --- type roles --- */
+  --font-display: "Zilla Slab", "Rockwell", Georgia, serif;
+  --font-body: "Spectral", Georgia, "Times New Roman", serif;
+  --font-accent: "Oswald", "Arial Narrow", system-ui, sans-serif;
+
+  /* --- fluid type scale --- */
+  --text-hero: clamp(2.75rem, 8vw, 6.5rem);
+  --text-title: clamp(2rem, 5vw, 3.5rem);
+  --text-section: clamp(1.6rem, 3.5vw, 2.5rem);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1.075rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Aged-paper grain: a faint fixed overlay of turbulence noise. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.04;
+    color: var(--color-lake-deep);
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-lake-deep);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-agate);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Eyebrow / kicker label — condensed, tracked, engraved-program feel. */
+  .eyebrow {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--color-agate);
+  }
+
+  /* Utility/data face for years, scores, bracket labels. */
+  .stat-face {
+    font-family: var(--font-accent);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The signature motif: a banded "agate" double rule used as a divider. */
+  .band-rule {
+    height: 6px;
+    width: 100%;
+    background:
+      linear-gradient(var(--color-agate), var(--color-agate)) center/100% 2px no-repeat,
+      linear-gradient(var(--color-amber), var(--color-amber)) center/100% 6px no-repeat;
+    border: none;
+  }
+
+  /* A quiet card on paper stock. */
+  .card-paper {
+    background: var(--color-paper);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 8%, transparent),
+      0 18px 40px -30px color-mix(in srgb, var(--color-lake-deep) 60%, transparent);
+  }
+
+  /* Primary action — engraved plaque button. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.4rem;
+    border: 1.5px solid var(--color-lake-deep);
+    background: var(--color-lake);
+    color: var(--color-paper);
+    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+  }
+  .btn:hover {
+    background: var(--color-amber);
+    color: var(--color-lake-deep);
+    transform: translateY(-2px);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-lake-deep);
+  }
+  .btn-ghost:hover {
+    background: var(--color-lake-deep);
+    color: var(--color-paper);
+  }
+}
+
+@layer utilities {
+  /* Content wrapper. */
+  .wrap {
+    width: min(72rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+  .wrap-narrow {
+    width: min(46rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  /* Scroll reveal — only hidden when JS is present (progressive enhancement),
+     so no-JS visitors and crawlers always see the content. */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    will-change: opacity, transform;
+  }
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

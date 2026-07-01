@@ -1,0 +1,211 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Countdown from "../components/Countdown.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { getChampions, defendingChampion } from "../lib/stats";
+import event from "../data/event.json";
+import lakes from "../data/lakes.json";
+
+const champs = await getChampions();
+const defending = defendingChampion(champs);
+const lake = lakes.find((l) => l.id === event.lake);
+---
+
+<BaseLayout
+  title={`${event.year} Tournament`}
+  description={`The ${event.year} Poopsie Beanbag Invitational — ${event.dateLabel} at ${event.locationNote}.`}
+>
+  <section class="hub-hero">
+    <div class="hub-hero__sky" aria-hidden="true"></div>
+    <div class="wrap hub-hero__inner">
+      <p class="eyebrow hub-hero__kicker">This year at the lake</p>
+      <h1 class="hub-hero__title">Poopsie Invitational {event.year}</h1>
+      <p class="hub-hero__meta stat-face">
+        📍 {event.locationNote} · 🗓 {event.dateLabel}
+      </p>
+      <div class="hub-hero__count">
+        <Countdown />
+      </div>
+    </div>
+    <svg class="hub-hero__wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,40 C360,80 720,0 1080,32 C1260,48 1350,60 1440,44 L1440,80 L0,80 Z" fill="var(--color-canvas)"></path>
+    </svg>
+  </section>
+
+  <div class="wrap hub-grid">
+    <!-- Defending champs -->
+    {
+      defending && (
+        <aside class="hub-card card-paper hub-card--champ" data-reveal>
+          <p class="eyebrow">Defending champions</p>
+          <p class="hub-card__champ">{defending.data.winners.join(" & ")}</p>
+          <p class="hub-card__note">
+            Seeded #1 by tradition, and required to accept all trash talk with grace.
+          </p>
+        </aside>
+      )
+    }
+
+    <!-- Venue -->
+    <aside class="hub-card card-paper" data-reveal>
+      <p class="eyebrow">The grounds</p>
+      <p class="hub-card__venue">{lake?.name ?? event.locationNote}</p>
+      {lake?.region && <p class="hub-card__region">{lake.region}</p>}
+      {lake?.blurb && <p class="hub-card__blurb">{lake.blurb}</p>}
+    </aside>
+
+    <!-- Format / RSVP -->
+    <aside class="hub-card card-paper" data-reveal>
+      <p class="eyebrow">Getting in</p>
+      <p class="hub-card__format">{event.format}</p>
+      <p class="hub-card__blurb">{event.rsvpNote}</p>
+    </aside>
+  </div>
+
+  <!-- Rules -->
+  <section class="wrap-narrow rules">
+    <SectionHeading eyebrow="Play by these" title="The rules of the Cup" align="center" />
+    <ol class="rules__list">
+      {
+        event.rules.map((rule, i) => (
+          <li class="rules__item" data-reveal>
+            <span class="rules__num stat-face">{String(i + 1).padStart(2, "0")}</span>
+            <span class="rules__text">{rule}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="rules__foot">
+      <!-- TODO(content): confirm official rules & scoring with the family. -->
+      Rules are enforced loosely and argued passionately. As it should be.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hub-hero {
+    position: relative;
+    isolation: isolate;
+    padding-block: 3.5rem 5rem;
+    color: var(--color-paper);
+    text-align: center;
+    overflow: hidden;
+  }
+  .hub-hero__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(100% 70% at 50% 0%, color-mix(in srgb, var(--color-amber) 28%, transparent), transparent 55%),
+      linear-gradient(180deg, var(--color-lake-deep), var(--color-lake));
+  }
+  .hub-hero__kicker {
+    color: var(--color-amber);
+  }
+  .hub-hero__title {
+    font-size: var(--text-title);
+    color: var(--color-paper);
+    margin: 0.4rem 0 0.6rem;
+  }
+  .hub-hero__meta {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--color-paper) 82%, transparent);
+    margin-bottom: 2rem;
+  }
+  .hub-hero__count {
+    display: flex;
+    justify-content: center;
+  }
+  .hub-hero__wave {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 80px;
+    z-index: -1;
+  }
+
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1.25rem;
+    margin-top: -2.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hub-card {
+    padding: 1.4rem 1.5rem;
+  }
+  .hub-card--champ {
+    border-top: 4px solid var(--color-amber);
+  }
+  .hub-card__champ {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-lake-deep);
+    margin: 0.2rem 0 0.5rem;
+  }
+  .hub-card__venue {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-lake-deep);
+    margin: 0.2rem 0 0.15rem;
+  }
+  .hub-card__region {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem;
+    color: var(--color-ink-faint);
+    margin: 0 0 0.5rem;
+  }
+  .hub-card__format {
+    font-weight: 600;
+    color: var(--color-lake-deep);
+    margin: 0.2rem 0 0.6rem;
+  }
+  .hub-card__blurb,
+  .hub-card__note {
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
+
+  .rules {
+    padding-block: 3.5rem 1rem;
+  }
+  .rules__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .rules__item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px dashed color-mix(in srgb, var(--color-ink) 16%, transparent);
+  }
+  .rules__num {
+    font-size: 1.5rem;
+    color: var(--color-agate);
+    font-weight: 600;
+  }
+  .rules__text {
+    font-size: 1.1rem;
+    color: var(--color-ink);
+  }
+  .rules__foot {
+    text-align: center;
+    margin-top: 2rem;
+    font-style: italic;
+    color: var(--color-ink-faint);
+  }
+</style>

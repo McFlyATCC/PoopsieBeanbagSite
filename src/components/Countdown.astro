@@ -1,0 +1,95 @@
+---
+import { nextIndependenceDay } from "../lib/site";
+const target = nextIndependenceDay();
+const targetYear = target.getFullYear();
+const iso = target.toISOString();
+---
+
+<div class="countdown" data-target={iso} aria-label={`Countdown to July 4th, ${targetYear}`}>
+  <p class="eyebrow countdown__label">Next toss · July 4th, {targetYear}</p>
+  <div class="countdown__grid" role="timer">
+    <div class="countdown__unit"><span class="countdown__num stat-face" data-days>—</span><span class="countdown__cap">Days</span></div>
+    <div class="countdown__unit"><span class="countdown__num stat-face" data-hours>—</span><span class="countdown__cap">Hours</span></div>
+    <div class="countdown__unit"><span class="countdown__num stat-face" data-mins>—</span><span class="countdown__cap">Minutes</span></div>
+    <div class="countdown__unit"><span class="countdown__num stat-face" data-secs>—</span><span class="countdown__cap">Seconds</span></div>
+  </div>
+  <p class="countdown__done" data-done hidden>🎆 It's tournament weekend — get to the lake!</p>
+</div>
+
+<script>
+  function pad(n: number) {
+    return String(n).padStart(2, "0");
+  }
+  function tickAll() {
+    const nodes = document.querySelectorAll<HTMLElement>(".countdown[data-target]");
+    nodes.forEach((el) => {
+      const target = new Date(el.dataset.target!).getTime();
+      const diff = target - Date.now();
+      const grid = el.querySelector<HTMLElement>(".countdown__grid");
+      const done = el.querySelector<HTMLElement>("[data-done]");
+      if (diff <= 0) {
+        if (grid) grid.style.display = "none";
+        if (done) done.hidden = false;
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.querySelector("[data-days]")!.textContent = String(d);
+      el.querySelector("[data-hours]")!.textContent = pad(h);
+      el.querySelector("[data-mins]")!.textContent = pad(m);
+      el.querySelector("[data-secs]")!.textContent = pad(s);
+    });
+  }
+  let timer: number | undefined;
+  function start() {
+    if (timer) window.clearInterval(timer);
+    if (document.querySelector(".countdown[data-target]")) {
+      tickAll();
+      timer = window.setInterval(tickAll, 1000);
+    }
+  }
+  document.addEventListener("astro:page-load", start);
+</script>
+
+<style>
+  .countdown__label {
+    margin-bottom: 0.75rem;
+    color: var(--color-amber);
+  }
+  .countdown__grid {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 4.2rem;
+    padding: 0.7rem 0.5rem;
+    background: var(--color-lake-deep);
+    color: var(--color-paper);
+    border: 1px solid color-mix(in srgb, var(--color-amber) 40%, transparent);
+  }
+  .countdown__num {
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-amber);
+  }
+  .countdown__cap {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.62rem;
+    margin-top: 0.35rem;
+    color: color-mix(in srgb, var(--color-paper) 75%, transparent);
+  }
+  .countdown__done {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--color-agate);
+  }
+</style>

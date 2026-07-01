@@ -1,0 +1,198 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Crest from "../components/Crest.astro";
+import PhotoFrame from "../components/PhotoFrame.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { withBase } from "../lib/site";
+---
+
+<BaseLayout
+  title="Poopsie"
+  description="In loving memory of Dennis “Poopsie” Burski — the always-smiling grandfather who won the very first tournament and gave the Poopsie Beanbag Invitational its name."
+>
+  <!-- Memorial header -->
+  <section class="mem">
+    <div class="wrap-narrow mem__inner">
+      <Crest size={120} withText={false} animate />
+      <p class="eyebrow mem__kicker">In loving memory</p>
+      <h1 class="mem__name">Dennis “Poopsie” Burski</h1>
+      <!-- TODO(content): confirm birth year for dates, e.g. "1943 – 2020". -->
+      <p class="mem__dates stat-face">Grandpa · Champion · The reason we gather · — 2020</p>
+    </div>
+  </section>
+
+  <div class="band-rule wrap-narrow" role="presentation"></div>
+
+  <!-- Story -->
+  <article class="wrap-narrow story">
+    <p class="story__lead" data-reveal>
+      Grandpa Burski was always a happy, smiling man who enjoyed nothing more
+      than being around his family. He worked hard and played harder, and his
+      whole mission was making sure everyone was smiling and laughing —
+      especially the grandkids.
+    </p>
+
+    <PhotoFrame ratio="16 / 9" caption="TODO: a favorite photo of Grandpa Burski." />
+
+    <SectionHeading eyebrow="Who he was" title="A grandpa in every crowd" />
+    <p data-reveal>
+      Along with Grandma Pat, he was at nearly every sporting event and school
+      event the grandkids ever had. If a grandkid was playing, the Burskis were
+      in the stands — a streak made possible, in no small part, by the legendary
+      Christmas <strong>“GAS CARD!”</strong> gifts that kept everyone on the road
+      and together.
+    </p>
+
+    <blockquote class="pull" data-reveal>
+      He wanted everyone smiling — and he had a belly bump waiting for any
+      grandkid who came close enough.
+    </blockquote>
+
+    <SectionHeading eyebrow="The name" title="Where “Poopsie” came from" />
+    <div class="callout card-paper" data-reveal>
+      <p>
+        The nickname goes all the way back to his school days with Grandma Pat.
+        Exactly how he earned it is a story still being pieced together —
+      </p>
+      <!-- TODO(content): replace with the real origin of the "Poopsie" nickname. -->
+      <p class="callout__todo">
+        <em>The family is still gathering the full story — check back soon.</em>
+      </p>
+    </div>
+
+    <SectionHeading eyebrow="The competitor" title="First to win the Cup" />
+    <div class="story__split">
+      <div data-reveal>
+        <p>
+          Grandpa had a gift for bean bags and horseshoes, and he proved it
+          right away: he <strong>won the very first tournament</strong>, back
+          when it was still called the Agate Cup. He'd go on to win a few more
+          over the years, with a rotating cast of partners — and Grandma Pat
+          right beside him for the best of them.
+        </p>
+        <p>
+          <a class="story__link" href={withBase("/champions")}>See his years in the Hall of Champions →</a>
+        </p>
+      </div>
+      <PhotoFrame caption="TODO: Poopsie at the boards, or holding the Cup." />
+    </div>
+
+    <SectionHeading eyebrow="2020" title="Carrying the tradition forward" />
+    <p data-reveal>
+      Grandpa Burski passed away in 2020. To make sure the yearly tradition he
+      loved could continue, the Agate Cup was renamed the
+      <strong>Poopsie Beanbag Invitational</strong> in his honor. Every July 4th
+      weekend since, the family has gathered at the lake to toss bags, talk
+      trash, and celebrate the man who taught them how.
+    </p>
+
+    <div class="closing" data-reveal>
+      <Crest size={80} withText={false} />
+      <p class="closing__line">Still smiling over every toss.</p>
+      <a class="btn" href={withBase("/gallery")}>Visit the gallery</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .mem {
+    text-align: center;
+    padding-block: 3rem 1.5rem;
+  }
+  .mem__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mem__kicker {
+    margin-top: 1.25rem;
+  }
+  .mem__name {
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    margin: 0.35rem 0 0.5rem;
+  }
+  .mem__dates {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    color: var(--color-ink-faint);
+  }
+
+  .story {
+    padding-block: 2.5rem 1rem;
+  }
+  .story > :global(p) {
+    margin-block: 1.1rem;
+  }
+  .story__lead {
+    font-size: 1.3rem;
+    line-height: 1.55;
+    color: var(--color-lake-deep);
+  }
+  .story :global(.frame) {
+    margin-block: 2rem;
+  }
+  .story :global(.sec-head) {
+    margin-top: 3rem;
+  }
+  .pull {
+    margin: 2.5rem 0;
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    border-left: 4px solid var(--color-amber);
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.25;
+    color: var(--color-agate);
+    font-weight: 700;
+  }
+  .callout {
+    padding: 1.5rem 1.75rem;
+  }
+  .callout p {
+    margin: 0 0 0.75rem;
+  }
+  .callout__todo {
+    color: var(--color-ink-faint);
+    margin-bottom: 0 !important;
+  }
+  .story__split {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .story__split :global(.frame) {
+    margin-block: 0;
+  }
+  .story__link {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.82rem;
+    color: var(--color-agate);
+    text-decoration: none;
+  }
+  .story__link:hover {
+    text-decoration: underline;
+  }
+  .closing {
+    text-align: center;
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .closing__line {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-lake-deep);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .story__split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

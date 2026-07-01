@@ -1,0 +1,91 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import AwardsWall from "../components/AwardsWall.astro";
+import Leaderboard from "../components/Leaderboard.astro";
+import { getChampions, topChampions, topDuos, playerRecords } from "../lib/stats";
+import awards from "../data/awards.json";
+
+const champs = await getChampions();
+const records = playerRecords(champs);
+
+const mostTitles = topChampions(champs, 6)
+  .filter((p) => p.championships > 0)
+  .map((p) => ({ name: p.name, value: p.championships, detail: p.titleYears.join(", ") }));
+
+const duos = topDuos(champs, 5).map((d) => ({
+  name: d.players.join(" & "),
+  value: d.titles,
+  detail: d.years.join(", "),
+}));
+
+const almostChamps = [...records]
+  .filter((p) => p.runnerUps > 0)
+  .sort((a, b) => b.runnerUps - a.runnerUps || b.finals - a.finals)
+  .slice(0, 6)
+  .map((p) => ({ name: p.name, value: p.runnerUps, detail: `${p.finals} finals reached` }));
+
+const mostFinals = [...records]
+  .sort((a, b) => b.finals - a.finals || b.championships - a.championships)
+  .slice(0, 6)
+  .map((p) => ({ name: p.name, value: p.finals, detail: `${p.championships} titles` }));
+---
+
+<BaseLayout
+  title="Stats"
+  description="Leaderboards, records, and completely unofficial awards from the Poopsie Beanbag Invitational."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Bragging rights & bad decisions</p>
+      <h1 class="page-head__title">Stats & superlatives</h1>
+      <p class="page-head__sub">
+        Some of these are real. All of them are permanent.
+      </p>
+    </div>
+    <div class="band-rule wrap" role="presentation"></div>
+  </header>
+
+  <!-- Awards -->
+  <section class="wrap section">
+    <SectionHeading eyebrow="The hardware nobody wanted" title="Unofficial awards" align="center" />
+    <AwardsWall awards={awards} />
+  </section>
+
+  <!-- Leaderboards -->
+  <section class="wrap section">
+    <SectionHeading eyebrow="For the record" title="The leaderboards" align="center" />
+    <div class="boards">
+      <Leaderboard title="Most Championships" unit="Titles" rows={mostTitles} />
+      <Leaderboard title="Greatest Duos" unit="Titles together" rows={duos} />
+      <Leaderboard title="Feared Runners-Up" unit="2nd-place finishes" rows={almostChamps} />
+      <Leaderboard title="Most Finals Reached" unit="Finals" rows={mostFinals} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: 3rem 0.5rem;
+  }
+  .page-head__title {
+    font-size: var(--text-title);
+    margin: 0.3rem 0 0.5rem;
+  }
+  .page-head__sub {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--color-ink-faint);
+    margin: 0 0 1rem;
+  }
+  .section {
+    padding-block: 2.5rem;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.25rem;
+  }
+</style>

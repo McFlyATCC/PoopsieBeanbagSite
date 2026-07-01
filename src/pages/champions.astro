@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Timeline from "../components/Timeline.astro";
+import LakeMap from "../components/LakeMap.astro";
+import { getChampions, summary } from "../lib/stats";
+import lakes from "../data/lakes.json";
+
+const champs = await getChampions();
+const stats = summary(champs);
+const lakeNames = Object.fromEntries(lakes.map((l) => [l.id, l.name]));
+
+// Build the map view with a year range per lake, derived from the records.
+const latestYear = stats.lastYear;
+const lakeViews = lakes.map((l) => {
+  const years = champs.filter((c) => c.data.lake === l.id).map((c) => c.data.year).sort((a, b) => a - b);
+  let yearsLabel = "—";
+  if (years.length) {
+    const min = years[0];
+    const max = years[years.length - 1];
+    yearsLabel = max === latestYear ? `${min}–present` : `${min}–${max}`;
+  }
+  return { ...l, yearsLabel };
+});
+---
+
+<BaseLayout
+  title="Champions"
+  description="Every Poopsie Beanbag Invitational champion, year by year, across three Minnesota lakes."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">The Hall of Champions</p>
+      <h1 class="page-head__title">Every Cup, every year</h1>
+      <p class="page-head__sub">
+        {stats.tournaments} tournaments · {stats.firstYear}–{stats.lastYear} · scroll down through the history.
+      </p>
+    </div>
+    <div class="band-rule wrap" role="presentation"></div>
+  </header>
+
+  <section class="wrap timeline-wrap">
+    <Timeline champions={champs} lakeNames={lakeNames} />
+  </section>
+
+  <section class="wrap venues">
+    <SectionHeading eyebrow="Home waters" title="Three lakes, one tradition" align="center" />
+    <LakeMap lakes={lakeViews} />
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: 3rem 0.5rem;
+  }
+  .page-head__title {
+    font-size: var(--text-title);
+    margin: 0.3rem 0 0.5rem;
+  }
+  .page-head__sub {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--color-ink-faint);
+    margin: 0 0 1rem;
+  }
+  .timeline-wrap {
+    padding-block: 2.5rem;
+  }
+  .venues {
+    padding-block: 3rem 1rem;
+  }
+</style>

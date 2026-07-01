@@ -1,0 +1,65 @@
+---
+interface Award {
+  id: string;
+  emoji: string;
+  title: string;
+  recipient: string;
+  blurb: string;
+}
+interface Props {
+  awards: Award[];
+}
+const { awards } = Astro.props;
+---
+
+<ul class="awards">
+  {
+    awards.map((a) => (
+      <li class="award card-paper" data-reveal>
+        <span class="award__emoji" aria-hidden="true">{a.emoji}</span>
+        <h3 class="award__title">{a.title}</h3>
+        <p class="award__recipient stat-face">{a.recipient}</p>
+        <p class="award__blurb">{a.blurb}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .awards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: 1.25rem;
+  }
+  .award {
+    padding: 1.5rem 1.5rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    position: relative;
+  }
+  .award__emoji {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .award__title {
+    font-size: 1.3rem;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .award__recipient {
+    color: var(--color-agate);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .award__blurb {
+    margin: 0.25rem 0 0;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+</style>

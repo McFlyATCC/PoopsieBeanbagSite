@@ -1,0 +1,112 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import DraftNotice from "../components/DraftNotice.astro";
+import { site, withBase } from "../lib/site";
+
+// Self-hosted fonts (no external requests — good for GitHub Pages).
+import "@fontsource/zilla-slab/400.css";
+import "@fontsource/zilla-slab/500.css";
+import "@fontsource/zilla-slab/600.css";
+import "@fontsource/zilla-slab/700.css";
+import "@fontsource/spectral/400.css";
+import "@fontsource/spectral/400-italic.css";
+import "@fontsource/spectral/500.css";
+import "@fontsource/spectral/600.css";
+import "@fontsource/oswald/500.css";
+import "@fontsource/oswald/600.css";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.short}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>
+      // Mark JS available before paint so scroll-reveal hides only for JS users.
+      document.documentElement.classList.add("js");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#1b3a4b" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <DraftNotice />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Scroll-reveal for [data-reveal] elements. Re-armed on every page
+      // navigation (Astro view transitions fire astro:page-load).
+      function armReveals() {
+        const els = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)");
+        if (!els.length) return;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduce || !("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                (e.target as HTMLElement).classList.add("is-visible");
+                obs.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+      document.addEventListener("astro:page-load", armReveals);
+    </script>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: 0;
+        z-index: 100;
+        background: var(--color-lake-deep);
+        color: var(--color-paper);
+        padding: 0.6rem 1rem;
+        font-family: var(--font-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.8rem;
+      }
+      .skip-link:focus {
+        left: 0.5rem;
+        top: 0.5rem;
+      }
+      main {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+  </body>
+</html>

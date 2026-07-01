@@ -1,0 +1,44 @@
+[
+  {
+    "id": "choke-artist",
+    "emoji": "🫠",
+    "title": "Choke Artist of the Decade",
+    "recipient": "Wade",
+    "blurb": "Reached the final more times than anyone alive. Won it exactly zero times. We admire the consistency."
+  },
+  {
+    "id": "most-hydrated",
+    "emoji": "🍺",
+    "title": "Most Hydrated Player",
+    "recipient": "Gus",
+    "blurb": "Nobody has ever seen this man's hands empty. Somehow throws better after noon."
+  },
+  {
+    "id": "trash-talk",
+    "emoji": "📣",
+    "title": "Loudest Trash Talker",
+    "recipient": "Danny",
+    "blurb": "Backs it up about 60% of the time, which is honestly higher than expected."
+  },
+  {
+    "id": "almost-champion",
+    "emoji": "💔",
+    "title": "Perennial Almost-Champion",
+    "recipient": "Terri",
+    "blurb": "Always a bridesmaid. The most feared runner-up in tournament history."
+  },
+  {
+    "id": "belly-bump",
+    "emoji": "🎉",
+    "title": "The Poopsie Belly-Bump Award",
+    "recipient": "Given each year",
+    "blurb": "For the player who celebrates the hardest — bag in, bump out. In honor of Grandpa's favorite victory move."
+  },
+  {
+    "id": "airmail",
+    "emoji": "🚀",
+    "title": "The Airmail Special",
+    "recipient": "Hank",
+    "blurb": "Holds the unofficial record for most bags thrown clean over the board and into the lake."
+  }
+]

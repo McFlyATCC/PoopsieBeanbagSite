@@ -1,0 +1,201 @@
+---
+import Bracket from "./Bracket.astro";
+import type { ChampionEntry } from "../lib/stats";
+import { site } from "../lib/site";
+
+interface Props {
+  champions: ChampionEntry[]; // any order; displayed newest → oldest
+  lakeNames: Record<string, string>;
+}
+const { champions, lakeNames } = Astro.props;
+const ordered = [...champions].sort((a, b) => b.data.year - a.data.year);
+
+function badgeFor(year: number): string | null {
+  if (year === site.estYear) return "The First Cup";
+  if (year === 2020) return "Renamed in his honor";
+  return null;
+}
+---
+
+<ol class="timeline">
+  {
+    ordered.map((c) => {
+      const d = c.data;
+      const badge = badgeFor(d.year);
+      return (
+        <li class="tl-item" data-reveal id={`year-${d.year}`}>
+          <div class="tl-node" aria-hidden="true">
+            <span class="tl-ring" />
+          </div>
+
+          <div class="tl-year">
+            <span class="tl-year__num stat-face">{d.year}</span>
+            <span class="eyebrow tl-year__lake">{lakeNames[d.lake] ?? d.lake}</span>
+          </div>
+
+          <div class="tl-card card-paper">
+            {badge && <span class="tl-badge">{badge}</span>}
+            <p class="tl-champ-label eyebrow">★ Champions ★</p>
+            <p class="tl-champs">{d.winners.join(" & ")}</p>
+            {d.runnersUp.length > 0 && (
+              <p class="tl-runners">
+                <span class="tl-runners__k">Runners-up</span> {d.runnersUp.join(" & ")}
+              </p>
+            )}
+            {d.recap && <p class="tl-recap">{d.recap}</p>}
+            {d.bracket && d.bracket.length > 0 && (
+              <details class="tl-bracket">
+                <summary>View the bracket</summary>
+                <div class="tl-bracket__body">
+                  <Bracket bracket={d.bracket} />
+                </div>
+              </details>
+            )}
+          </div>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  /* The ripple spine */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: repeating-linear-gradient(
+      var(--color-amber) 0 10px,
+      color-mix(in srgb, var(--color-amber) 30%, transparent) 10px 20px
+    );
+  }
+
+  .tl-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem 1.4rem;
+    padding-left: 2.4rem;
+    padding-block: 1.1rem;
+    align-items: start;
+  }
+  .tl-node {
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+  }
+  .tl-ring {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-agate);
+    box-shadow: 0 0 0 4px var(--color-canvas), 0 0 0 6px var(--color-amber);
+  }
+
+  .tl-year {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-top: 0.9rem;
+  }
+  .tl-year__num {
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-lake-deep);
+  }
+  .tl-year__lake {
+    font-size: 0.68rem;
+    color: var(--color-ink-faint);
+  }
+
+  .tl-card {
+    padding: 1.25rem 1.4rem;
+    position: relative;
+  }
+  .tl-badge {
+    position: absolute;
+    top: -0.7rem;
+    right: 1rem;
+    background: var(--color-agate);
+    color: var(--color-paper);
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.66rem;
+    padding: 0.25rem 0.6rem;
+  }
+  .tl-champ-label {
+    color: var(--color-amber-deep);
+    margin-bottom: 0.3rem;
+  }
+  .tl-champs {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--color-lake-deep);
+    margin: 0;
+  }
+  .tl-runners {
+    margin: 0.5rem 0 0;
+    color: var(--color-ink-soft);
+    font-size: 0.95rem;
+  }
+  .tl-runners__k {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem;
+    color: var(--color-ink-faint);
+    margin-right: 0.35rem;
+  }
+  .tl-recap {
+    margin: 0.75rem 0 0;
+    font-style: italic;
+    color: var(--color-ink-soft);
+  }
+
+  .tl-bracket {
+    margin-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    padding-top: 0.75rem;
+  }
+  .tl-bracket summary {
+    cursor: pointer;
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.76rem;
+    color: var(--color-agate);
+  }
+  .tl-bracket__body {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .tl-item {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+    .tl-year {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 0.6rem;
+      padding-top: 0;
+    }
+    .tl-year__num {
+      font-size: 1.8rem;
+    }
+  }
+</style>

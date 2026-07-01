@@ -1,0 +1,118 @@
+---
+/**
+ * The Agate Cup crest — the site's signature mark.
+ * Concentric banded rings read three ways at once: an agate stone (the Cup's
+ * namesake), a cornhole hole, and a ripple on the lake. Optional curved wordmark.
+ */
+interface Props {
+  size?: number;
+  withText?: boolean;
+  class?: string;
+  animate?: boolean;
+}
+const { size = 200, withText = true, class: klass = "", animate = false } = Astro.props;
+const est = 2010;
+---
+
+<svg
+  class:list={["crest", { "crest--animate": animate }, klass]}
+  width={size}
+  height={size}
+  viewBox="0 0 200 200"
+  role="img"
+  aria-label="The Agate Cup crest of the Poopsie Beanbag Invitational"
+>
+  <defs>
+    <path id="crest-arc-top" d="M 30 100 A 70 70 0 0 1 170 100" fill="none" />
+    <path id="crest-arc-bottom" d="M 36 100 A 64 64 0 0 0 164 100" fill="none" />
+  </defs>
+
+  <!-- Outer plaque ring -->
+  <circle cx="100" cy="100" r="97" fill="var(--color-lake-deep)" />
+  <circle cx="100" cy="100" r="90" fill="var(--color-paper)" />
+
+  {
+    withText && (
+      <g class="crest__wordmark" fill="var(--color-lake-deep)">
+        <text class="crest__type" text-anchor="middle">
+          <textPath href="#crest-arc-top" startOffset="50%">
+            POOPSIE · BEANBAG · INVITATIONAL
+          </textPath>
+        </text>
+        <text class="crest__type crest__type--sm" text-anchor="middle" fill="var(--color-agate)">
+          <textPath href="#crest-arc-bottom" startOffset="50%">
+            ★ EST · {est} ★ THE AGATE CUP ★
+          </textPath>
+        </text>
+      </g>
+    )
+  }
+
+  <!-- Agate bands: concentric rings, alternating stone colors -->
+  <g class="crest__bands">
+    <circle cx="100" cy="100" r="72" fill="var(--color-lake)" />
+    <circle cx="100" cy="100" r="64" fill="var(--color-amber)" />
+    <circle cx="100" cy="100" r="55" fill="var(--color-paper)" />
+    <circle cx="100" cy="100" r="46" fill="var(--color-agate)" />
+    <circle cx="100" cy="100" r="36" fill="var(--color-amber-deep)" />
+    <circle cx="100" cy="100" r="27" fill="var(--color-lake)" />
+  </g>
+
+  <!-- The hole / center: a Northstar over the dark -->
+  <circle cx="100" cy="100" r="18" fill="var(--color-lake-deep)" />
+  <path
+    class="crest__star"
+    fill="var(--color-amber)"
+    d="M100 87 l3.2 8.1 8.8 .5 -6.8 5.6 2.3 8.5 -7.5 -4.7 -7.5 4.7 2.3 -8.5 -6.8 -5.6 8.8 -.5z"
+  />
+</svg>
+
+<style>
+  .crest {
+    display: block;
+  }
+  .crest__type {
+    font-family: var(--font-accent);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+  .crest__type--sm {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Load-in: rings settle outward, star pops. Respectful, one-time. */
+  .crest--animate .crest__bands circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: crest-ring 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .crest--animate .crest__bands circle:nth-child(1) { animation-delay: 0.05s; }
+  .crest--animate .crest__bands circle:nth-child(2) { animation-delay: 0.12s; }
+  .crest--animate .crest__bands circle:nth-child(3) { animation-delay: 0.19s; }
+  .crest--animate .crest__bands circle:nth-child(4) { animation-delay: 0.26s; }
+  .crest--animate .crest__bands circle:nth-child(5) { animation-delay: 0.33s; }
+  .crest--animate .crest__bands circle:nth-child(6) { animation-delay: 0.4s; }
+  .crest--animate .crest__star {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: crest-star 0.5s ease 0.5s both;
+  }
+
+  @keyframes crest-ring {
+    from { transform: scale(0.4); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes crest-star {
+    from { transform: scale(0) rotate(-40deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crest--animate .crest__bands circle,
+    .crest--animate .crest__star {
+      animation: none;
+    }
+  }
+</style>

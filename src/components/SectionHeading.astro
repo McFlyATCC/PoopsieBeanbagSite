@@ -1,0 +1,33 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  align?: "left" | "center";
+}
+const { eyebrow, title, align = "left" } = Astro.props;
+---
+
+<div class:list={["sec-head", `sec-head--${align}`]} data-reveal>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2 class="sec-head__title">{title}</h2>
+  <div class="band-rule sec-head__rule" role="presentation"></div>
+</div>
+
+<style>
+  .sec-head {
+    margin-bottom: 2rem;
+  }
+  .sec-head--center {
+    text-align: center;
+  }
+  .sec-head__title {
+    font-size: var(--text-section);
+    margin: 0.4rem 0 0.8rem;
+  }
+  .sec-head__rule {
+    max-width: 7rem;
+  }
+  .sec-head--center .sec-head__rule {
+    margin-inline: auto;
+  }
+</style>

@@ -1,0 +1,336 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Crest from "../components/Crest.astro";
+import Countdown from "../components/Countdown.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { getChampions, summary, defendingChampion } from "../lib/stats";
+import { site, withBase } from "../lib/site";
+import lakes from "../data/lakes.json";
+
+const champs = await getChampions();
+const stats = summary(champs);
+const defending = defendingChampion(champs);
+const lakeName = (id: string) => lakes.find((l) => l.id === id)?.name ?? id;
+
+const numbers = [
+  { value: stats.tournaments, label: "Tournaments" },
+  { value: `${stats.firstYear}–${stats.lastYear}`, label: "Years of memories" },
+  { value: stats.lakeCount, label: "Minnesota lakes" },
+  { value: stats.uniqueFinalists, label: "Finalists all-time" },
+];
+
+const explore = [
+  { href: withBase("/poopsie"), eyebrow: "The namesake", title: "Meet Poopsie", body: "The always-smiling grandpa who started it all." },
+  { href: withBase("/champions"), eyebrow: "Every year", title: "Hall of Champions", body: "A scroll through every Cup, 2010 to today." },
+  { href: withBase("/gallery"), eyebrow: "The memories", title: "Photo Gallery", body: "Belly bumps, sunsets, and championship tosses." },
+  { href: withBase("/stats"), eyebrow: "Bragging rights", title: "Stats & Roasts", body: "Leaderboards and awards nobody asked for." },
+];
+---
+
+<BaseLayout>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__sky" aria-hidden="true"></div>
+    <div class="wrap hero__inner">
+      <Crest size={168} withText={false} animate class="hero__crest" />
+      <p class="eyebrow hero__est">Est. {site.estYear} · The Agate Cup</p>
+      <h1 class="hero__title">Poopsie Beanbag<br />Invitational</h1>
+      <p class="hero__tag">{site.tagline}</p>
+      <p class="hero__memorial">
+        In loving memory of <strong>{site.honoree}</strong>
+      </p>
+      <div class="hero__countdown">
+        <Countdown />
+      </div>
+      <div class="hero__cta">
+        <a class="btn" href={withBase("/2026")}>This year's tournament</a>
+        <a class="btn btn-ghost" href={withBase("/champions")}>See the champions</a>
+      </div>
+    </div>
+    <svg class="hero__wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        d="M0,48 C240,90 480,10 720,36 C960,62 1200,96 1440,52 L1440,90 L0,90 Z"
+        fill="var(--color-canvas)"></path>
+    </svg>
+  </section>
+
+  <!-- TRIBUTE TEASER -->
+  <section class="wrap-narrow tribute" data-reveal>
+    <p class="tribute__quote">
+      “He wanted nothing more than to be around his family — working hard,
+      playing hard, and making sure everyone was smiling.”
+    </p>
+    <a class="tribute__link" href={withBase("/poopsie")}>Read Poopsie's story →</a>
+  </section>
+
+  <!-- DEFENDING CHAMPION -->
+  {
+    defending && (
+      <section class="wrap champ-spot" data-reveal>
+        <div class="champ-spot__inner card-paper">
+          <Crest size={92} withText={false} class="champ-spot__crest" />
+          <div>
+            <p class="eyebrow">Defending champions · {defending.data.year}</p>
+            <p class="champ-spot__names">{defending.data.winners.join(" & ")}</p>
+            <p class="champ-spot__meta stat-face">
+              {lakeName(defending.data.lake)} · Bring your best game to {stats.lastYear + 1}
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- BY THE NUMBERS -->
+  <section class="wrap numbers" aria-label="By the numbers">
+    {
+      numbers.map((n) => (
+        <div class="numbers__item" data-reveal>
+          <span class="numbers__val stat-face">{n.value}</span>
+          <span class="numbers__lbl">{n.label}</span>
+        </div>
+      ))
+    }
+  </section>
+
+  <!-- EXPLORE -->
+  <section class="wrap explore">
+    <SectionHeading eyebrow="Around the grounds" title="Explore the tradition" align="center" />
+    <div class="explore__grid">
+      {
+        explore.map((e) => (
+          <a class="explore__card card-paper" href={e.href} data-reveal>
+            <p class="eyebrow">{e.eyebrow}</p>
+            <h3 class="explore__title">{e.title}</h3>
+            <p class="explore__body">{e.body}</p>
+            <span class="explore__go stat-face">Enter →</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* HERO */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    padding-top: 3.5rem;
+    padding-bottom: 5.5rem;
+    color: var(--color-paper);
+    overflow: hidden;
+  }
+  .hero__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--color-amber) 30%, transparent), transparent 55%),
+      linear-gradient(180deg, var(--color-lake-deep) 0%, var(--color-lake) 55%, #24506099 100%);
+  }
+  /* Faint concentric ripple behind the crest */
+  .hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 46rem;
+    height: 46rem;
+    background: radial-gradient(
+      circle,
+      transparent 0 6rem,
+      color-mix(in srgb, var(--color-amber) 8%, transparent) 6rem 6.2rem,
+      transparent 6.2rem 10rem,
+      color-mix(in srgb, var(--color-paper) 6%, transparent) 10rem 10.2rem,
+      transparent 10.2rem 15rem,
+      color-mix(in srgb, var(--color-amber) 6%, transparent) 15rem 15.2rem,
+      transparent 15.2rem
+    );
+    pointer-events: none;
+  }
+  .hero__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero__crest {
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.35));
+  }
+  .hero__est {
+    color: var(--color-amber);
+    margin-top: 1.25rem;
+  }
+  .hero__title {
+    font-size: var(--text-hero);
+    color: var(--color-paper);
+    margin: 0.4rem 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .hero__tag {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: color-mix(in srgb, var(--color-paper) 88%, transparent);
+    margin: 0;
+  }
+  .hero__memorial {
+    margin: 0.75rem 0 2rem;
+    color: color-mix(in srgb, var(--color-paper) 78%, transparent);
+  }
+  .hero__memorial strong {
+    color: var(--color-amber);
+    font-family: var(--font-display);
+  }
+  .hero__countdown {
+    margin-bottom: 2rem;
+  }
+  .hero__cta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero__wave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 90px;
+    z-index: -1;
+  }
+
+  /* TRIBUTE */
+  .tribute {
+    text-align: center;
+    padding-block: 3.5rem 1rem;
+  }
+  .tribute__quote {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.25;
+    color: var(--color-lake-deep);
+    margin: 0 0 1rem;
+    text-wrap: balance;
+  }
+  .tribute__link {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    color: var(--color-agate);
+    text-decoration: none;
+  }
+  .tribute__link:hover {
+    text-decoration: underline;
+  }
+
+  /* DEFENDING CHAMPION */
+  .champ-spot {
+    padding-top: 2.5rem;
+  }
+  .champ-spot__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 1.75rem;
+  }
+  .champ-spot__crest {
+    flex-shrink: 0;
+  }
+  .champ-spot__names {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    line-height: 1.05;
+    color: var(--color-lake-deep);
+    margin: 0.15rem 0;
+  }
+  .champ-spot__meta {
+    color: var(--color-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.85rem;
+  }
+
+  /* NUMBERS */
+  .numbers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding-block: 3.5rem;
+  }
+  .numbers__item {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    border-left: 2px solid color-mix(in srgb, var(--color-amber) 60%, transparent);
+  }
+  .numbers__val {
+    display: block;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 600;
+    color: var(--color-agate);
+    line-height: 1;
+  }
+  .numbers__lbl {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    color: var(--color-ink-soft);
+    margin-top: 0.4rem;
+    display: block;
+  }
+
+  /* EXPLORE */
+  .explore {
+    padding-block: 1.5rem 2rem;
+  }
+  .explore__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1.1rem;
+  }
+  .explore__card {
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .explore__card:hover {
+    transform: translateY(-4px);
+  }
+  .explore__title {
+    font-size: 1.4rem;
+    margin: 0.1rem 0 0.2rem;
+  }
+  .explore__body {
+    color: var(--color-ink-soft);
+    margin: 0;
+    flex-grow: 1;
+  }
+  .explore__go {
+    color: var(--color-agate);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.78rem;
+    margin-top: 0.8rem;
+  }
+
+  @media (max-width: 640px) {
+    .numbers {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .champ-spot__inner {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

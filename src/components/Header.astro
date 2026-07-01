@@ -1,0 +1,118 @@
+---
+import Crest from "./Crest.astro";
+import { nav, site, withBase } from "../lib/site";
+
+const here = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (href: string) => {
+  const h = href.replace(/\/$/, "");
+  if (h === withBase("").replace(/\/$/, "")) return here === h; // Home exact
+  return here === h || here.startsWith(h + "/");
+};
+---
+
+<header class="site-head">
+  <div class="wrap site-head__inner">
+    <a class="brand" href={withBase("/")} aria-label={`${site.title} — home`}>
+      <Crest size={48} withText={false} />
+      <span class="brand__text">
+        <span class="brand__name">{site.short}</span>
+        <span class="brand__est stat-face">Est. {site.estYear}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={["site-nav__link", { "is-active": isActive(item.href) }]}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+  <div class="band-rule" role="presentation"></div>
+</header>
+
+<style>
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .site-head__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: var(--color-lake-deep);
+  }
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
+  }
+  .brand__est {
+    color: var(--color-agate);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    align-items: center;
+  }
+  .site-nav__link {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    text-decoration: none;
+    padding: 0.25rem 0.1rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .site-nav__link:hover {
+    color: var(--color-lake-deep);
+    border-color: var(--color-amber);
+  }
+  .site-nav__link.is-active {
+    color: var(--color-agate);
+    border-color: var(--color-agate);
+  }
+
+  @media (max-width: 640px) {
+    .site-head__inner {
+      justify-content: center;
+      text-align: center;
+    }
+    .site-nav {
+      justify-content: center;
+    }
+  }
+</style>

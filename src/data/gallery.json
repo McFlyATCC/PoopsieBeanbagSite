@@ -1,0 +1,17 @@
+{
+  "_note": "TODO(content): drop the ~100 real photos into src/assets/gallery/ and list them here. Each entry maps to a file by `src` (filename inside src/assets/gallery). Entries without a matching file render as a labeled placeholder tile. `year` powers the year filter; `caption` is optional.",
+  "photos": [
+    { "src": "2010-first-champions.jpg", "year": 2010, "caption": "Poopsie and Pat with the very first Agate Cup." },
+    { "src": "2012-final-toss.jpg", "year": 2012, "caption": "The toss that decided the 2012 final." },
+    { "src": "2014-rush-lake.jpg", "year": 2014, "caption": "Boards set up on the shore at Rush Lake." },
+    { "src": "2016-crowd.jpg", "year": 2016, "caption": "The gallery at Otter Tail Lake." },
+    { "src": "2017-belly-bump.jpg", "year": 2017, "caption": "A championship belly bump." },
+    { "src": "2019-sunset-final.jpg", "year": 2019, "caption": "Final decided as the sun went down." },
+    { "src": "2020-tribute.jpg", "year": 2020, "caption": "The year the Cup took Poopsie's name." },
+    { "src": "2021-island-lake.jpg", "year": 2021, "caption": "The tournament's new home at Island Lake." },
+    { "src": "2022-kids-bracket.jpg", "year": 2022, "caption": "The next generation steps up to the boards." },
+    { "src": "2023-trophy.jpg", "year": 2023, "caption": "The Agate Cup, engraved with another name." },
+    { "src": "2024-fireworks.jpg", "year": 2024, "caption": "July 4th over the lake." },
+    { "src": "2025-champions.jpg", "year": 2025, "caption": "The reigning champions." }
+  ]
+}

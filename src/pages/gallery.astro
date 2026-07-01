@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Gallery from "../components/Gallery.astro";
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Photos from years of the Poopsie Beanbag Invitational — belly bumps, lake sunsets, and championship tosses."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">The memories</p>
+      <h1 class="page-head__title">Photo gallery</h1>
+      <p class="page-head__sub">
+        Click any photo to enlarge. Filter by year to relive a single summer.
+      </p>
+    </div>
+    <div class="band-rule wrap" role="presentation"></div>
+  </header>
+
+  <section class="wrap gallery-wrap">
+    <Gallery />
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: 3rem 0.5rem;
+  }
+  .page-head__title {
+    font-size: var(--text-title);
+    margin: 0.3rem 0 0.5rem;
+  }
+  .page-head__sub {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--color-ink-faint);
+    margin: 0 0 1rem;
+  }
+  .gallery-wrap {
+    padding-block: 2.5rem;
+  }
+</style>

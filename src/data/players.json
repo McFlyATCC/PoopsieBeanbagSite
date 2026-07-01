@@ -1,0 +1,24 @@
+[
+  {
+    "id": "poopsie",
+    "name": "Poopsie",
+    "nickname": "Dennis \"Poopsie\" Burski",
+    "bio": "The namesake. A bean bag and horseshoe ace who won the very first tournament, and a grandpa whose whole mission was making sure everyone was smiling. TODO(content): final bio + the story behind the name “Poopsie.”"
+  },
+  {
+    "id": "pat",
+    "name": "Pat",
+    "nickname": "Grandma Pat",
+    "bio": "Poopsie's partner in everything — at the boards, in the stands at every grandkid's game, and behind every “GAS CARD!” Christmas gift."
+  },
+  { "id": "danny", "name": "Danny", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "marie", "name": "Marie", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "hank", "name": "Hank", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "joan", "name": "Joan", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "wade", "name": "Wade", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "terri", "name": "Terri", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "gus", "name": "Gus", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "lorraine", "name": "Lorraine", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "cal", "name": "Cal", "bio": "SAMPLE competitor — replace with a real player." },
+  { "id": "brenda", "name": "Brenda", "bio": "SAMPLE competitor — replace with a real player." }
+]

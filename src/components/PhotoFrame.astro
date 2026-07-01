@@ -1,0 +1,63 @@
+---
+/**
+ * A framed photo slot. Until a real image is dropped in, it renders a tasteful
+ * labeled placeholder with the agate-ring motif. Pass `caption` to describe
+ * the intended photo. `ratio` accepts any CSS aspect-ratio (default portrait).
+ */
+interface Props {
+  caption?: string;
+  ratio?: string;
+  class?: string;
+}
+const { caption, ratio = "3 / 4", class: klass = "" } = Astro.props;
+---
+
+<figure class:list={["frame", klass]} data-reveal>
+  <div class="frame__slot" style={`aspect-ratio:${ratio}`}>
+    <span class="frame__ring" aria-hidden="true"></span>
+    <span class="frame__label">Photo coming soon</span>
+  </div>
+  {caption && <figcaption class="frame__cap">{caption}</figcaption>}
+</figure>
+
+<style>
+  .frame {
+    margin: 0;
+  }
+  .frame__slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: radial-gradient(
+      circle at 50% 40%,
+      color-mix(in srgb, var(--color-amber) 16%, var(--color-paper)),
+      var(--color-canvas-deep)
+    );
+    border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
+    box-shadow: inset 0 0 0 6px var(--color-paper),
+      inset 0 0 0 7px color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+  .frame__ring {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 5px solid var(--color-amber);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-agate) 35%, transparent);
+  }
+  .frame__label {
+    font-family: var(--font-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.66rem;
+    color: var(--color-ink-faint);
+  }
+  .frame__cap {
+    margin-top: 0.6rem;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import { DRAFT_DATA } from "../lib/site";
+---
+
+{
+  DRAFT_DATA && (
+    <div class="draft-notice" role="note">
+      <span class="wrap draft-notice__inner">
+        <strong>Sample records shown.</strong> The real champions, photos, and
+        stats are being gathered — names and results here are placeholders for now.
+      </span>
+    </div>
+  )
+}
+
+<style>
+  .draft-notice {
+    background: var(--color-amber);
+    color: var(--color-lake-deep);
+    border-bottom: 1.5px solid var(--color-amber-deep);
+    font-family: var(--font-accent);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+  }
+  .draft-notice__inner {
+    display: block;
+    padding-block: 0.5rem;
+    text-align: center;
+  }
+  .draft-notice strong {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>
