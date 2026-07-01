@@ -11,6 +11,12 @@
     "nickname": "Grandma Pat",
     "bio": "Poopsie's partner in everything — at the boards, in the stands at every grandkid's game, and behind every “GAS CARD!” Christmas gift."
   },
+  {
+    "id": "nick",
+    "name": "Nick",
+    "nickname": "Grandson Nick",
+    "bio": "Grandson of Poopsie and Pat. Teamed up with Grandma Pat to win the emotional 2020 Cup — the first one after Grandpa passed, with a bald eagle overhead."
+  },
   { "id": "danny", "name": "Danny", "bio": "SAMPLE competitor — replace with a real player." },
   { "id": "marie", "name": "Marie", "bio": "SAMPLE competitor — replace with a real player." },
   { "id": "hank", "name": "Hank", "bio": "SAMPLE competitor — replace with a real player." },
