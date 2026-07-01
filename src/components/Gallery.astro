@@ -9,14 +9,17 @@ interface Photo {
 }
 const photos = (galleryData.photos as Photo[]) ?? [];
 
-// Resolve any real images dropped into src/assets/gallery/.
+// Resolve any real images dropped into src/assets/gallery/ (incl. subfolders
+// like champions/). Keyed by the path relative to the gallery folder, so a
+// manifest `src` can be "2017.jpg" or "champions/2017.jpg".
 const files = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/gallery/*.{jpg,jpeg,png,webp,avif}",
+  "../assets/gallery/**/*.{jpg,jpeg,png,webp,avif}",
   { eager: true },
 );
 const byName: Record<string, ImageMetadata> = {};
 for (const [path, mod] of Object.entries(files)) {
-  byName[path.split("/").pop()!] = mod.default;
+  const rel = path.split("/gallery/")[1]; // e.g. "champions/2017.jpg"
+  if (rel) byName[rel] = mod.default;
 }
 
 const years = [...new Set(photos.map((p) => p.year))].sort((a, b) => b - a);

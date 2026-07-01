@@ -22,6 +22,9 @@ const lakeViews = lakes.map((l) => {
   }
   return { ...l, yearsLabel };
 });
+
+const numberWords: Record<number, string> = { 1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six" };
+const lakeCountWord = numberWords[lakeViews.length] ?? String(lakeViews.length);
 ---
 
 <BaseLayout
@@ -44,7 +47,7 @@ const lakeViews = lakes.map((l) => {
   </section>
 
   <section class="wrap venues">
-    <SectionHeading eyebrow="Home waters" title="Three lakes, one tradition" align="center" />
+    <SectionHeading eyebrow="Home waters" title={`${lakeCountWord} lakes, one tradition`} align="center" />
     <LakeMap lakes={lakeViews} />
   </section>
 </BaseLayout>

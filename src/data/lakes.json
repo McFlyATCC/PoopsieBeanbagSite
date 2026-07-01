@@ -4,16 +4,24 @@
     "name": "Rush Lake",
     "region": "Otter Tail County, MN",
     "blurb": "Where it all began. The early Agate Cup years were played on the shore at Rush Lake, boards set up in the grass between the cabin and the water.",
-    "x": 34,
-    "y": 52
+    "x": 33,
+    "y": 56
   },
   {
     "id": "ottertail",
     "name": "Otter Tail Lake",
     "region": "Otter Tail County, MN",
     "blurb": "The tournament's middle era. Bigger crowds, longer brackets, and more than one final decided as the sun went down over the lake.",
-    "x": 29,
-    "y": 49
+    "x": 25,
+    "y": 48
+  },
+  {
+    "id": "eastleaf",
+    "name": "East Leaf Lake",
+    "region": "Otter Tail County, MN",
+    "blurb": "A stop along the tournament's travels — East Leaf Lake hosted the Cup for a couple of memorable summers before the move to Island Lake.",
+    "x": 39,
+    "y": 44
   },
   {
     "id": "island",
